@@ -10,6 +10,7 @@ class list {
 public:
 
     list();
+    list(const list& other);
     list(size_t count, const int& value = int());
 
     ~list();
@@ -44,8 +45,28 @@ public:
 
 private:
 
-    // Your code goes here...
+    class Node {
+    public:
+        explicit Node(int value, Node* prev = nullptr, Node* next = nullptr) {
+            this->value = value;
+            this->prev = prev;
+            this->next = next;
+        }
 
+        int value;
+        Node* prev;
+        Node* next;
+    };
+
+    static std::pair<list*, list*> split(const list& l);
+
+    static list merge(const list& left, const list& right);
+
+    static list mergeSort(const list& l);
+
+    Node* root_ = new Node(0);
+
+    size_t size_ = 0;
 };
 
 }  // namespace task
