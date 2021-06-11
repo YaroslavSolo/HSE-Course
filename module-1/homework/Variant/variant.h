@@ -136,20 +136,19 @@ constexpr size_t CheckDuplicates(size_t cur_pos, const bool (&exact)[SizeofFound
         return kNotFound;
     }
 
-    return CheckDuplicatesHelper(cur_pos, CheckDuplicates(cur_pos + 1, exact, convertible), exact,
-            convertible);
+    return CheckDuplicatesHelper(cur_pos, CheckDuplicates(cur_pos + 1, exact, convertible),
+            exact, convertible);
 }
 
 template <typename TargetType, typename... Types>
 struct FindExactlyOneChecked {
     constexpr static bool kExact[sizeof...(Types)] = {std::is_same<TargetType, Types>::value...};
-    constexpr static bool kConvertible[sizeof...(Types)] = {
-            std::is_convertible<TargetType, Types>::value...};
+    constexpr static bool kConvertible[sizeof...(Types)] =
+            {std::is_convertible<TargetType, Types>::value...};
     constexpr static size_t kValue = CheckDuplicates(0, kExact, kConvertible);
 
     static_assert(kValue != kNotFound, "no such type in parameter list");
-    static_assert(kValue != kAmbiguity,
-            "there are several occurrences of the same type in parameter list");
+    static_assert(kValue != kAmbiguity, "several same types encountered");
 };
 
 template <typename T>
