@@ -144,7 +144,7 @@ template <typename TargetType, typename... Types>
 struct FindExactlyOneChecked {
     constexpr static bool kExact[sizeof...(Types)] = {std::is_same<TargetType, Types>::value...};
     constexpr static bool kConvertible[sizeof...(Types)] = {
-            std::is_convertible<TargetType, Types>::value...};
+        std::is_convertible<TargetType, Types>::value...};
     constexpr static size_t kValue = CheckDuplicates(0, kExact, kConvertible);
 
     static_assert(kValue != kNotFound, "no such type in parameter list");
