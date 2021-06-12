@@ -20,17 +20,21 @@ constexpr InPlace kInPlace{};
 template <typename T, bool>
 class OptionalDestructBase {
 public:
-    constexpr OptionalDestructBase() : engaged_(false) {}
+    constexpr OptionalDestructBase() : engaged_(false) {
+    }
 
-    constexpr explicit OptionalDestructBase(NullOpt) : engaged_(false) {}
+    constexpr explicit OptionalDestructBase(NullOpt) : engaged_(false) {
+    }
 
     template <typename U = T>
     constexpr explicit OptionalDestructBase(U&& val)
-        : value_(std::forward<U>(val)), engaged_(true) {}
+            : value_(std::forward<U>(val)), engaged_(true) {
+    }
 
     template <typename... Args>
     constexpr explicit OptionalDestructBase(InPlace, Args&&... args)
-        : value_(std::forward<Args>(args)...), engaged_(true) {}
+            : value_(std::forward<Args>(args)...), engaged_(true) {
+    }
 
 protected:
     template <typename U = T>
@@ -51,17 +55,21 @@ protected:
 template <typename T>
 class OptionalDestructBase<T, false> {
 public:
-    constexpr OptionalDestructBase() : engaged_(false) {}
+    constexpr OptionalDestructBase() : engaged_(false) {
+    }
 
-    constexpr explicit OptionalDestructBase(NullOpt) : engaged_(false) {}
+    constexpr explicit OptionalDestructBase(NullOpt) : engaged_(false) {
+    }
 
     template <typename U = T>
     constexpr explicit OptionalDestructBase(U&& val)
-            : value_(std::forward<U>(val)), engaged_(true) {}
+            : value_(std::forward<U>(val)), engaged_(true) {
+    }
 
     template <typename... Args>
     constexpr explicit OptionalDestructBase(InPlace, Args&&... args)
-            : value_(std::forward<Args>(args)...), engaged_(true) {}
+            : value_(std::forward<Args>(args)...), engaged_(true) {
+    }
 
     ~OptionalDestructBase() {
         if (engaged_) {
@@ -99,7 +107,7 @@ private:
 public:
     using value_type = T;
 
-    constexpr Optional() noexcept : base() {};
+    constexpr Optional() noexcept : base(){};
 
     template <typename U = value_type>
     constexpr explicit Optional(U&& value);
@@ -141,14 +149,17 @@ public:
 
 template <typename T>
 template <typename U>
-constexpr Optional<T>::Optional(U&& value) : base(std::forward<U>(value)) {}
+constexpr Optional<T>::Optional(U&& value) : base(std::forward<U>(value)) {
+}
 
 template <typename T>
-constexpr Optional<T>::Optional(NullOpt) noexcept : base() {}
+constexpr Optional<T>::Optional(NullOpt) noexcept : base() {
+}
 
 template <typename T>
 template <typename... Args>
-constexpr Optional<T>::Optional(InPlace, Args&&... args) : base(kInPlace, args...) {}
+constexpr Optional<T>::Optional(InPlace, Args&&... args) : base(kInPlace, args...) {
+}
 
 template <typename T>
 Optional<T>& Optional<T>::operator=(NullOpt) noexcept {
@@ -191,7 +202,8 @@ constexpr Optional<T>::operator bool() const noexcept {
 }
 
 template <typename T>
-constexpr std::add_pointer_t<const typename Optional<T>::value_type> Optional<T>::operator->() const {
+constexpr std::add_pointer_t<const typename Optional<T>::value_type> Optional<T>::operator->()
+const {
     return &(this->value_);
 }
 
