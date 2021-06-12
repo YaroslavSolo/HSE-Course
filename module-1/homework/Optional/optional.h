@@ -139,85 +139,85 @@ public:
     constexpr value_type&& operator*() &&;
 };
 
-    template <typename T>
-    template <typename U>
-    constexpr Optional<T>::Optional(U&& value) : base(std::forward<U>(value)) {}
+template <typename T>
+template <typename U>
+constexpr Optional<T>::Optional(U&& value) : base(std::forward<U>(value)) {}
 
-    template <typename T>
-    constexpr Optional<T>::Optional(NullOpt) noexcept : base() {}
+template <typename T>
+constexpr Optional<T>::Optional(NullOpt) noexcept : base() {}
 
-    template <typename T>
-    template <typename... Args>
-    constexpr Optional<T>::Optional(InPlace, Args&&... args) : base(kInPlace, args...) {}
+template <typename T>
+template <typename... Args>
+constexpr Optional<T>::Optional(InPlace, Args&&... args) : base(kInPlace, args...) {}
 
-    template <typename T>
-    Optional<T>& Optional<T>::operator=(NullOpt) noexcept {
-        this->ResetHelper();
-        return *this;
-    }
+template <typename T>
+Optional<T>& Optional<T>::operator=(NullOpt) noexcept {
+    this->ResetHelper();
+    return *this;
+}
 
-    template <typename T>
-    template <typename U>
-    Optional<T>& Optional<T>::operator=(U&& value) {
-        Set(std::forward<U>(value));
-        return *this;
-    }
+template <typename T>
+template <typename U>
+Optional<T>& Optional<T>::operator=(U&& value) {
+    Set(std::forward<U>(value));
+    return *this;
+}
 
-    template <typename T>
-    void Optional<T>::Reset() noexcept {
-        this->ResetHelper();
-    }
+template <typename T>
+void Optional<T>::Reset() noexcept {
+    this->ResetHelper();
+}
 
-    template <typename T>
-    template <typename U>
-    constexpr T Optional<T>::ValueOr(U&& default_value) const& {
-        return this->engaged_ ? this->value_ : default_value;
-    }
+template <typename T>
+template <typename U>
+constexpr T Optional<T>::ValueOr(U&& default_value) const& {
+    return this->engaged_ ? this->value_ : default_value;
+}
 
-    template <typename T>
-    template <typename U>
-    constexpr T Optional<T>::ValueOr(U&& default_value) && {
-        return this->engaged_ ? this->value_ : default_value;
-    }
+template <typename T>
+template <typename U>
+constexpr T Optional<T>::ValueOr(U&& default_value) && {
+    return this->engaged_ ? this->value_ : default_value;
+}
 
-    template <typename T>
-    constexpr bool Optional<T>::HasValue() const noexcept {
-        return this->engaged_;
-    }
+template <typename T>
+constexpr bool Optional<T>::HasValue() const noexcept {
+    return this->engaged_;
+}
 
-    template <typename T>
-    constexpr Optional<T>::operator bool() const noexcept {
-        return this->engaged_;
-    }
+template <typename T>
+constexpr Optional<T>::operator bool() const noexcept {
+    return this->engaged_;
+}
 
-    template <typename T>
-    constexpr std::add_pointer_t<const typename Optional<T>::value_type> Optional<T>::operator->() const {
-        return &(this->value_);
-    }
+template <typename T>
+constexpr std::add_pointer_t<const typename Optional<T>::value_type> Optional<T>::operator->() const {
+    return &(this->value_);
+}
 
-    template <typename T>
-    constexpr std::add_pointer_t<typename Optional<T>::value_type> Optional<T>::operator->() {
-        return &(this->value_);
-    }
+template <typename T>
+constexpr std::add_pointer_t<typename Optional<T>::value_type> Optional<T>::operator->() {
+    return &(this->value_);
+}
 
-    template <typename T>
-    constexpr const typename Optional<T>::value_type& Optional<T>::operator*() const& {
-        return this->value_;
-    }
+template <typename T>
+constexpr const typename Optional<T>::value_type& Optional<T>::operator*() const& {
+    return this->value_;
+}
 
-    template <typename T>
-    constexpr typename Optional<T>::value_type& Optional<T>::operator*() & {
-        return this->value_;
-    }
+template <typename T>
+constexpr typename Optional<T>::value_type& Optional<T>::operator*() & {
+    return this->value_;
+}
 
-    template <typename T>
-    constexpr const typename Optional<T>::value_type&& Optional<T>::operator*() const&& {
-        return this->value_;
-    }
+template <typename T>
+constexpr const typename Optional<T>::value_type&& Optional<T>::operator*() const&& {
+    return this->value_;
+}
 
-    template <typename T>
-    constexpr typename Optional<T>::value_type&& Optional<T>::operator*() && {
-        return this->value_;
-    }
+template <typename T>
+constexpr typename Optional<T>::value_type&& Optional<T>::operator*() && {
+    return this->value_;
+}
 
 }  // namespace task
