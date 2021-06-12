@@ -28,12 +28,12 @@ public:
 
     template <typename U = T>
     constexpr explicit OptionalDestructBase(U&& val)
-            : value_(std::forward<U>(val)), engaged_(true) {
+        : value_(std::forward<U>(val)), engaged_(true) {
     }
 
     template <typename... Args>
     constexpr explicit OptionalDestructBase(InPlace, Args&&... args)
-            : value_(std::forward<Args>(args)...), engaged_(true) {
+        : value_(std::forward<Args>(args)...), engaged_(true) {
     }
 
 protected:
@@ -63,12 +63,12 @@ public:
 
     template <typename U = T>
     constexpr explicit OptionalDestructBase(U&& val)
-            : value_(std::forward<U>(val)), engaged_(true) {
+        : value_(std::forward<U>(val)), engaged_(true) {
     }
 
     template <typename... Args>
     constexpr explicit OptionalDestructBase(InPlace, Args&&... args)
-            : value_(std::forward<Args>(args)...), engaged_(true) {
+        : value_(std::forward<Args>(args)...), engaged_(true) {
     }
 
     ~OptionalDestructBase() {
@@ -203,7 +203,7 @@ constexpr Optional<T>::operator bool() const noexcept {
 
 template <typename T>
 constexpr std::add_pointer_t<const typename Optional<T>::value_type> Optional<T>::operator->()
-const {
+    const {
     return &(this->value_);
 }
 
