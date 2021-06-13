@@ -8,8 +8,7 @@
 #include "utility.h"
 
 template <bool condition, typename T, typename F>
-struct Conditional {
-};
+struct Conditional {};
 
 // Conditional - partial specialization
 template <typename T, typename F>
