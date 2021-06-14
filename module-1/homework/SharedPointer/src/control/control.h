@@ -4,25 +4,77 @@
 
 class SharedCount {
 public:
-    // Your code goes here...
+    SharedCount() = default;
+
+    explicit SharedCount(size_t count) noexcept : sharedCount(count) {
+    }
+
+    virtual ~SharedCount() = default;
+
+    void AddShared() noexcept {
+        ++sharedCount;
+    }
+
+    bool ReleaseShared() noexcept {
+        if (--sharedCount == 0) {
+            OnZeroShared();
+            return false;
+        }
+
+        return true;
+    }
+
+    size_t GetShared() {
+        return sharedCount;
+    }
+
+    virtual void OnZeroShared() noexcept = 0;
 
 protected:
-    // Your code goes here...
+    std::atomic<size_t> sharedCount{0};
 };
 
 class SharedWeakCount : public SharedCount {
 public:
-    // Your code goes here...
+    SharedWeakCount() = default;
+
+    virtual ~SharedWeakCount() = default;
+
+    void AddWeak() noexcept {
+        ++weakCount;
+    }
+
+    void ReleaseWeak() noexcept {
+        --weakCount;
+    }
+
+    size_t GetWeak() {
+        return weakCount;
+    }
 
 protected:
-    // Your code goes here...
+    std::atomic<size_t> weakCount{0};
 };
 
-template <typename T, typename Deleter>
+template <typename T, typename Deleter = std::default_delete<std::remove_pointer_t<T>>>
 class ControlBlock : public SharedWeakCount {
 public:
-    // Your code goes here...
+    ControlBlock() = default;
+
+    explicit ControlBlock(T& object)
+        : object_(object), deleter_(std::default_delete<std::remove_pointer_t<T>>()){};
+
+    ControlBlock(T& object, Deleter& deleter) : object_(object), deleter_(deleter){};
+
+    ControlBlock(ControlBlock&) = delete;
+
+    void operator=(ControlBlock&) = delete;
+
+    void OnZeroShared() noexcept override {
+        deleter_(object_);
+    }
 
 private:
-    // Your code goes here...
+    T object_;
+    Deleter deleter_;
 };
