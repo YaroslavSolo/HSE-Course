@@ -279,6 +279,14 @@ bool WeakPtr<T>::Expired() const noexcept {
 
 template <typename T>
 SharedPtr<T> WeakPtr<T>::Lock() const noexcept {
-    return Expired() ? SharedPtr<T>() : SharedPtr<T>(ptr_);
+    if (Expired()) {
+        return SharedPtr<T>();
+    }
+
+    SharedPtr<T> res;
+    res.ptr_ = ptr_;
+    res.control_block_ = control_block_;
+    control_block_->AddShared();
+    return res;
 }
 // WeakPtr
