@@ -29,11 +29,7 @@ public:
     using node_allocator_traits = std::allocator_traits<node_allocator>;
 
     // Special member functions
-    List() : root_(allocator_.allocate(1)) {
-        allocator_.construct(root_);
-        root_->prev = root_;
-        root_->next = root_;
-    }
+    List();
 
     List(const List& other)
         : allocator_(node_allocator_traits::select_on_container_copy_construction(other.allocator_)),
@@ -190,7 +186,7 @@ private:
 
     size_type size_ = 0;
 
-    node_allocator allocator_ = node_allocator();
+    node_allocator allocator_;
 };
 
 template <typename T, typename Allocator>
@@ -198,6 +194,14 @@ List<T, Allocator>::~List() {
     Clear();
     allocator_.destroy(root_);
     allocator_.deallocate(root_, 1);
+}
+
+template <typename T, typename Allocator>
+List<T, Allocator>::List() {
+    root_ = allocator_.allocate(1);
+    allocator_.construct(root_);
+    root_->prev = root_;
+    root_->next = root_;
 }
 
 template <typename T, typename Allocator>
@@ -334,7 +338,7 @@ void List<T, Allocator>::Resize(size_t count) {
     }
 
     while (size_ < count) {
-        PushBack(int());
+        PushBack({});
     }
 }
 
@@ -408,11 +412,11 @@ std::pair<List<T, Allocator>*, List<T, Allocator>*> List<T, Allocator>::Split(co
     List<T, Allocator>* right = new List<T, Allocator>();
 
     Node* cur = l.root_->next;
-    for (int i = 0; i < l.Size() / 2; ++i, cur = cur->next) {
+    for (size_t i = 0; i < l.Size() / 2; ++i, cur = cur->next) {
         left->PushBack(std::move(cur->value));
     }
 
-    for (int i = l.Size() / 2; i < l.Size(); ++i, cur = cur->next) {
+    for (size_t i = l.Size() / 2; i < l.Size(); ++i, cur = cur->next) {
         right->PushBack(std::move(cur->value));
     }
 
