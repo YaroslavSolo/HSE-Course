@@ -32,8 +32,8 @@ public:
     List();
 
     List(const List& other)
-        : allocator_(node_allocator_traits::select_on_container_copy_construction(other.allocator_)),
-          root_(allocator_.allocate(1)) {
+        : allocator_(node_allocator_traits::select_on_container_copy_construction(other.allocator_)) {
+        root_ = allocator_.allocate(1);
         allocator_.construct(root_);
         Node* cur = other.root_->next;
 
@@ -75,7 +75,7 @@ public:
 
     // Modifiers
     void Clear();
-    void Swap(List& other) noexcept;
+    void Swap(List& other);
 
     void PushBack(const T& value);
     void PushBack(T&& value);
@@ -343,7 +343,7 @@ void List<T, Allocator>::Resize(size_t count) {
 }
 
 template <typename T, typename Allocator>
-void List<T, Allocator>::Swap(List<T, Allocator>& other) noexcept {
+void List<T, Allocator>::Swap(List<T, Allocator>& other) {
     std::swap(root_, other.root_);
     std::swap(size_, other.size_);
     bool swap_alloc = node_allocator_traits::propagate_on_container_swap::value;
@@ -476,8 +476,9 @@ List<T, Allocator>::List(const List& other, const Allocator& alloc)
 }
 
 template <typename T, typename Allocator>
-List<T, Allocator>::List(List<T, Allocator>&& other)
-        : allocator_(std::move(other.allocator_)), root_(other.root_), size_(other.size_) {
+List<T, Allocator>::List(List<T, Allocator>&& other) : allocator_(std::move(other.allocator_)) {
+        root_ = other.root_;
+        size_ = other.size_;
     other.root_ = nullptr;
 }
 
