@@ -33,7 +33,7 @@ public:
 
     List(const List &other)
         : allocator_(
-            node_allocator_traits::select_on_container_copy_construction(other.allocator_)) {
+        node_allocator_traits::select_on_container_copy_construction(other.allocator_)) {
         root_ = allocator_.allocate(1);
         allocator_.construct(root_);
         root_->next = root_;
