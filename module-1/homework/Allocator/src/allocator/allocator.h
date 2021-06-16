@@ -38,7 +38,8 @@ public:
         return static_cast<pointer>(arena_) + (*offset_ - n);
     }
 
-    void deallocate(T* p, size_t n) {  // NOLINT
+    void deallocate(T* p, size_t n){
+        // NOLINT
     };
 
     template <typename... Args>
@@ -111,7 +112,7 @@ template <typename T>
 template <typename U>
 CustomAllocator<T>::CustomAllocator(const CustomAllocator<U>& other) noexcept
     : arena_(other.GetArena()),
-    offset_(other.GetOffset()),
-    num_allocators_(other.GetNumAllocators()) {
+      offset_(other.GetOffset()),
+      num_allocators_(other.GetNumAllocators()) {
     ++(*num_allocators_);
 }
